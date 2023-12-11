@@ -1,0 +1,41 @@
+INTERESANTE (VER) LOL:
+    * swtch() Cambio de contexto, consume del quantum?
+    * sched() que se llama al final
+    * Como sale de la funcion Scheduler, como se aplica el time slice?
+
+    **************************************************************************************
+    start.c indica que el quantum es de 1/10 de un segundo (1 millon de ciclos)
+    CLINT, de la arquitectura RISC-V
+    CLINT_MTIMECMP("id del core")
+        - MNTIME: ciclos del boot
+        - MTIMECMP: mtime >= mtimecmp se levanta un timer interrupt
+        - ???
+    **************************************************************************************
+
+1)
+    Tras un analisis del codigo vimos que el scheduler realiza un ciclo sobre el arreglo de procesos de la tabla de procesos hasta encontrar uno que tenga el estado RUNNABLE
+    Es round robin, Criterio?? aquel que este antes en el arreglo en modo RUNNABLE.
+
+
+   Xv6 utiliza Round Robin como politica de planificación. Se recorre un arreglo con los procesos, se elige el primero que se encuentra en estado RUNNABLE, se cambia el estado a RUNNING y se realiza un cambio de contexto con el proceso que estaba corriendo en el CPU. Se permite la interrupción por tiempo mediante la función intr_on().
+
+2)
+a) 
+   En start.c vemos que el Quantum es un 1/10 de segundo en el QEMU (un millón de ciclos).	 
+
+b) 	
+	El cambio de contexto se realiza en assembly, en la función swtch. En la misma se usan 14 instrucciones para guardar los registros y se usan 14 instrucciones para cargar. Por lo tanto tiene orden constante.
+	
+c)  
+	Si, consume tiempo del quantum dado que el cambio de contexto se realiza dentro de la función scheduler() y sched() donde está activado el timer interrupt.
+	
+d) 
+	Reduciendo el quantum se le puede asignar menos tiempo a un proceso. Se cambia en start.c en la función timerinit, en el int interval, que son la cantidad de ciclos.
+    
+
+
+
+
+
+
+
