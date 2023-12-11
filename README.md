@@ -1,5 +1,5 @@
-## SistOp
-# Sistemas Operativos
+# SistOp
+## Sistemas Operativos
 
 * LAB0 involves using shell commands.
 * LAB1 involves creating our own command-line interpreter called myBash.
